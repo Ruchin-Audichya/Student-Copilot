@@ -1,0 +1,910 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Co-Pilot AI Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/heroicons@2.0.16/24/outline/index.js" type="module"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="font-sans bg-slate-50 text-slate-800">
+    <!-- Navigation -->
+    <!-- @COMPONENT: Navbar [Fixed navigation with logo and menu items] -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-primary-600">🎓 Co-Pilot AI</h1>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#landing" class="nav-link text-primary-600 font-medium">Home</a>
+                    <a href="#onboarding" class="nav-link text-slate-600 hover:text-slate-900">Onboarding</a>
+                    <a href="#internships" class="nav-link text-slate-600 hover:text-slate-900">Internships</a>
+                    <a href="#skills" class="nav-link text-slate-600 hover:text-slate-900">Skill Gap</a>
+                    <a href="#projects" class="nav-link text-slate-600 hover:text-slate-900">Projects</a>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-slate-600 hover:text-slate-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navbar -->
+
+    <!-- Main Content Container -->
+    <main class="min-h-screen">
+        <!-- Landing Page Section -->
+        <!-- @COMPONENT: LandingPage [Hero section with CTA and feature overview] -->
+        <section id="landing" class="page-section active">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-br from-primary-50 to-blue-100 py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+                            Your AI Career Co-Pilot<br>
+                            <span class="text-primary-600">for B.Tech Students</span>
+                        </h1>
+                        <p class="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+                            Navigate your tech career with AI-powered guidance. Find perfect internships, 
+                            identify skill gaps, and get personalized project recommendations.
+                        </p>
+                        <button data-event="click:navigateToOnboarding" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform hover:scale-105 transition-all duration-200">
+                            Get Started Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process Steps -->
+            <div class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Your Journey to Success</h2>
+                        <p class="text-lg text-slate-600">Three simple steps to accelerate your tech career</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- @MAP: steps.map(step => ( -->
+                        <div class="text-center group">
+                            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-200 transition-colors">
+                                <span class="text-primary-600 text-2xl font-bold">1</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-slate-900 mb-4">Onboard</h3>
+                            <p class="text-slate-600">Tell us about your skills, interests, and career goals to create your personalized profile.</p>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-emerald-200 transition-colors">
+                                <span class="text-emerald-600 text-2xl font-bold">2</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-slate-900 mb-4">Find Internships</h3>
+                            <p class="text-slate-600">Discover perfectly matched internship opportunities with AI-powered compatibility scores.</p>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-amber-200 transition-colors">
+                                <span class="text-amber-600 text-2xl font-bold">3</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-slate-900 mb-4">Improve Skills</h3>
+                            <p class="text-slate-600">Get personalized learning paths and project recommendations to close skill gaps.</p>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: LandingPage -->
+
+        <!-- Onboarding Page Section -->
+        <!-- @COMPONENT: OnboardingPage [Multi-step form for student profile creation] -->
+        <section id="onboarding" class="page-section hidden">
+            <div class="py-12 bg-white min-h-screen">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Welcome to Co-Pilot AI</h2>
+                        <p class="text-lg text-slate-600">Let's create your personalized profile</p>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <!-- @STATE: currentStep:number = 1, totalSteps:number = 3 -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-semibold">1</div>
+                                <span class="ml-2 text-sm font-medium text-primary-600">Personal Info</span>
+                            </div>
+                            <div class="w-16 h-1 bg-slate-200 rounded-full">
+                                <div class="w-0 h-full bg-primary-600 rounded-full transition-all duration-300"></div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-semibold">2</div>
+                                <span class="ml-2 text-sm font-medium text-slate-500">Skills</span>
+                            </div>
+                            <div class="w-16 h-1 bg-slate-200 rounded-full"></div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-semibold">3</div>
+                                <span class="ml-2 text-sm font-medium text-slate-500">Interests</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Personal Information -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                        <form data-implementation="Multi-step form with validation">
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                                    <input data-bind="student.name" type="text" placeholder="Enter your full name" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+                                    <input data-bind="student.email" type="email" placeholder="your.email@college.edu" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Year in College</label>
+                                    <select data-bind="student.year" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Select your current year</option>
+                                        <option value="1">1st Year</option>
+                                        <option value="2">2nd Year</option>
+                                        <option value="3">3rd Year</option>
+                                        <option value="4">4th Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end mt-8">
+                                <button type="button" data-event="click:nextStep" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors">
+                                    Next Step
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: OnboardingPage -->
+
+        <!-- Internship Finder Page Section -->
+        <!-- @COMPONENT: InternshipFinder [Display matched internship opportunities] -->
+        <section id="internships" class="page-section hidden">
+            <div class="py-12 bg-slate-50 min-h-screen">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Perfect Internship Matches</h2>
+                        <p class="text-lg text-slate-600">AI-curated opportunities based on your profile</p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
+                        <div class="flex flex-wrap gap-4">
+                            <select class="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option>All Locations</option>
+                                <option>Remote</option>
+                                <option>Bangalore</option>
+                                <option>Mumbai</option>
+                                <option>Delhi</option>
+                            </select>
+                            <select class="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option>All Roles</option>
+                                <option>Software Development</option>
+                                <option>Data Science</option>
+                                <option>Product Management</option>
+                            </select>
+                            <button class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Internship Cards Grid -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- @MAP: internships.map(internship => ( -->
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 data-bind="internship.title" class="text-lg font-semibold text-slate-900 mb-2">Frontend Developer Intern</h3>
+                                    <p data-bind="internship.company" class="text-slate-600 font-medium">TechCorp Solutions</p>
+                                    <p data-bind="internship.location" class="text-sm text-slate-500">📍 Remote</p>
+                                </div>
+                                <div class="bg-emerald-100 px-3 py-1 rounded-full">
+                                    <span data-bind="internship.matchScore" class="text-emerald-700 font-semibold text-sm">95% Match</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">💰</span>
+                                    <span data-bind="internship.stipend">₹15,000 - ₹25,000</span>
+                                </div>
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">⏱️</span>
+                                    <span data-bind="internship.duration">3-6 months</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">React</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">JavaScript</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">CSS</span>
+                            </div>
+
+                            <button data-event="click:applyToInternship" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl font-semibold transition-colors">
+                                Apply Now
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-2">ML Engineer Intern</h3>
+                                    <p class="text-slate-600 font-medium">DataTech Labs</p>
+                                    <p class="text-sm text-slate-500">📍 Bangalore</p>
+                                </div>
+                                <div class="bg-amber-100 px-3 py-1 rounded-full">
+                                    <span class="text-amber-700 font-semibold text-sm">87% Match</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">💰</span>
+                                    <span>₹20,000 - ₹30,000</span>
+                                </div>
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">⏱️</span>
+                                    <span>6 months</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">Python</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">TensorFlow</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">SQL</span>
+                            </div>
+
+                            <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl font-semibold transition-colors">
+                                Apply Now
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Backend Developer</h3>
+                                    <p class="text-slate-600 font-medium">StartupXYZ</p>
+                                    <p class="text-sm text-slate-500">📍 Remote</p>
+                                </div>
+                                <div class="bg-blue-100 px-3 py-1 rounded-full">
+                                    <span class="text-blue-700 font-semibold text-sm">92% Match</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">💰</span>
+                                    <span>₹18,000 - ₹28,000</span>
+                                </div>
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <span class="mr-2">⏱️</span>
+                                    <span>4-6 months</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">Node.js</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">MongoDB</span>
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">APIs</span>
+                            </div>
+
+                            <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl font-semibold transition-colors">
+                                Apply Now
+                            </button>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="text-center mt-12">
+                        <button class="bg-white hover:bg-slate-50 text-slate-600 px-8 py-3 rounded-xl font-semibold border border-slate-300 transition-colors">
+                            Load More Opportunities
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: InternshipFinder -->
+
+        <!-- Skill Gap Analyzer Page Section -->
+        <!-- @COMPONENT: SkillGapAnalyzer [Analyze and display skill gaps with learning plans] -->
+        <section id="skills" class="page-section hidden">
+            <div class="py-12 bg-white min-h-screen">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Skill Gap Analysis</h2>
+                        <p class="text-lg text-slate-600">Identify what you need to learn for your target role</p>
+                    </div>
+
+                    <!-- Target Role Selection -->
+                    <div class="bg-slate-50 p-8 rounded-2xl mb-8">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">Select Your Target Role</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <button data-event="click:selectTargetRole" class="p-4 bg-white border-2 border-primary-600 rounded-xl text-left hover:bg-primary-50 transition-colors">
+                                <h4 class="font-semibold text-slate-900">Full-Stack Developer</h4>
+                                <p class="text-sm text-slate-600 mt-1">Frontend + Backend development</p>
+                            </button>
+                            <button class="p-4 bg-white border border-slate-300 rounded-xl text-left hover:bg-slate-50 transition-colors">
+                                <h4 class="font-semibold text-slate-900">Data Scientist</h4>
+                                <p class="text-sm text-slate-600 mt-1">ML, Analytics, Statistics</p>
+                            </button>
+                            <button class="p-4 bg-white border border-slate-300 rounded-xl text-left hover:bg-slate-50 transition-colors">
+                                <h4 class="font-semibold text-slate-900">DevOps Engineer</h4>
+                                <p class="text-sm text-slate-600 mt-1">Cloud, CI/CD, Infrastructure</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Results -->
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Current Skills -->
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                            <h3 class="text-xl font-semibold text-slate-900 mb-6 flex items-center">
+                                <span class="bg-emerald-100 p-2 rounded-lg mr-3">
+                                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </span>
+                                Your Current Skills
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <!-- @MAP: currentSkills.map(skill => ( -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span data-bind="skill.name" class="text-slate-900 font-medium">React</span>
+                                        <span class="ml-2 bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs">Advanced</span>
+                                    </div>
+                                    <div class="w-24 bg-slate-200 rounded-full h-2">
+                                        <div data-bind="skill.proficiency" class="w-4/5 bg-emerald-500 h-2 rounded-full"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="text-slate-900 font-medium">JavaScript</span>
+                                        <span class="ml-2 bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Intermediate</span>
+                                    </div>
+                                    <div class="w-24 bg-slate-200 rounded-full h-2">
+                                        <div class="w-3/5 bg-blue-500 h-2 rounded-full"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="text-slate-900 font-medium">CSS</span>
+                                        <span class="ml-2 bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs">Beginner</span>
+                                    </div>
+                                    <div class="w-24 bg-slate-200 rounded-full h-2">
+                                        <div class="w-2/5 bg-amber-500 h-2 rounded-full"></div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+
+                        <!-- Missing Skills -->
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+                            <h3 class="text-xl font-semibold text-slate-900 mb-6 flex items-center">
+                                <span class="bg-red-100 p-2 rounded-lg mr-3">
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </span>
+                                Skills to Learn
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <!-- @MAP: missingSkills.map(skill => ( -->
+                                <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                                    <div class="flex items-center">
+                                        <span data-bind="skill.name" class="text-slate-900 font-medium">Node.js</span>
+                                        <span data-bind="skill.priority" class="ml-2 bg-red-100 text-red-700 px-2 py-1 rounded text-xs">High Priority</span>
+                                    </div>
+                                    <span data-bind="skill.timeToLearn" class="text-sm text-slate-600">2-3 weeks</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-100">
+                                    <div class="flex items-center">
+                                        <span class="text-slate-900 font-medium">MongoDB</span>
+                                        <span class="ml-2 bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs">Medium Priority</span>
+                                    </div>
+                                    <span class="text-sm text-slate-600">1-2 weeks</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                                    <div class="flex items-center">
+                                        <span class="text-slate-900 font-medium">Docker</span>
+                                        <span class="ml-2 bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Low Priority</span>
+                                    </div>
+                                    <span class="text-sm text-slate-600">3-4 weeks</span>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Learning Plan -->
+                    <div class="mt-8 bg-gradient-to-br from-primary-50 to-blue-100 p-8 rounded-2xl">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-6 flex items-center">
+                            <span class="bg-primary-100 p-2 rounded-lg mr-3">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                            </span>
+                            Your 30-Day Learning Plan
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-4 gap-4">
+                            <!-- @MAP: learningPlan.weeks.map((week, index) => ( -->
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <h4 data-bind="week.title" class="font-semibold text-slate-900 mb-2">Week 1</h4>
+                                <p data-bind="week.focus" class="text-sm text-slate-600 mb-3">Node.js Fundamentals</p>
+                                <ul class="space-y-1">
+                                    <li data-bind="week.task1" class="text-xs text-slate-600">• Express.js basics</li>
+                                    <li data-bind="week.task2" class="text-xs text-slate-600">• REST API creation</li>
+                                    <li data-bind="week.task3" class="text-xs text-slate-600">• Build a simple server</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <h4 class="font-semibold text-slate-900 mb-2">Week 2</h4>
+                                <p class="text-sm text-slate-600 mb-3">Database Integration</p>
+                                <ul class="space-y-1">
+                                    <li class="text-xs text-slate-600">• MongoDB setup</li>
+                                    <li class="text-xs text-slate-600">• CRUD operations</li>
+                                    <li class="text-xs text-slate-600">• Data modeling</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <h4 class="font-semibold text-slate-900 mb-2">Week 3</h4>
+                                <p class="text-sm text-slate-600 mb-3">Authentication & Security</p>
+                                <ul class="space-y-1">
+                                    <li class="text-xs text-slate-600">• JWT implementation</li>
+                                    <li class="text-xs text-slate-600">• User management</li>
+                                    <li class="text-xs text-slate-600">• Security best practices</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <h4 class="font-semibold text-slate-900 mb-2">Week 4</h4>
+                                <p class="text-sm text-slate-600 mb-3">Project Integration</p>
+                                <ul class="space-y-1">
+                                    <li class="text-xs text-slate-600">• Deploy application</li>
+                                    <li class="text-xs text-slate-600">• Testing & debugging</li>
+                                    <li class="text-xs text-slate-600">• Portfolio project</li>
+                                </ul>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <button data-event="click:startLearningPlan" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors">
+                                Start Learning Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: SkillGapAnalyzer -->
+
+        <!-- Project Recommender Page Section -->
+        <!-- @COMPONENT: ProjectRecommender [AI-suggested project ideas] -->
+        <section id="projects" class="page-section hidden">
+            <div class="py-12 bg-slate-50 min-h-screen">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Project Recommendations</h2>
+                        <p class="text-lg text-slate-600">AI-curated projects to boost your portfolio and skills</p>
+                    </div>
+
+                    <!-- Project Cards -->
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- @MAP: projects.map(project => ( -->
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 data-bind="project.title" class="text-xl font-semibold text-slate-900 mb-2">E-Commerce Dashboard</h3>
+                                    <p data-bind="project.difficulty" class="text-sm text-amber-600 font-medium bg-amber-100 px-2 py-1 rounded">Intermediate</p>
+                                </div>
+                                <div class="bg-primary-100 p-3 rounded-xl">
+                                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <p data-bind="project.description" class="text-slate-600 mb-4">
+                                Build a comprehensive admin dashboard for an e-commerce platform with real-time analytics, 
+                                inventory management, and customer insights using React and Node.js.
+                            </p>
+
+                            <div class="mb-4">
+                                <h4 class="font-medium text-slate-900 mb-2">Technologies You'll Learn:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">React</span>
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Node.js</span>
+                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">MongoDB</span>
+                                    <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">Chart.js</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-medium text-slate-900 mb-2">Project Features:</h4>
+                                <ul class="space-y-1">
+                                    <li data-bind="project.feature1" class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Real-time sales analytics
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Inventory management system
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Customer behavior insights
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-600">
+                                    <span data-bind="project.duration">⏱️ 2-3 weeks</span>
+                                </div>
+                                <button data-event="click:startProject" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-xl font-semibold transition-colors">
+                                    Start Project
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-slate-900 mb-2">AI Chatbot Assistant</h3>
+                                    <p class="text-sm text-red-600 font-medium bg-red-100 px-2 py-1 rounded">Advanced</p>
+                                </div>
+                                <div class="bg-emerald-100 p-3 rounded-xl">
+                                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <p class="text-slate-600 mb-4">
+                                Create an intelligent chatbot using natural language processing and machine learning. 
+                                Integrate with popular messaging platforms and implement context-aware conversations.
+                            </p>
+
+                            <div class="mb-4">
+                                <h4 class="font-medium text-slate-900 mb-2">Technologies You'll Learn:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">Python</span>
+                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">TensorFlow</span>
+                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded text-xs">NLP</span>
+                                    <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded text-xs">Flask</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-medium text-slate-900 mb-2">Project Features:</h4>
+                                <ul class="space-y-1">
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Natural language understanding
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Context-aware responses
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Multi-platform integration
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-600">
+                                    <span>⏱️ 4-5 weeks</span>
+                                </div>
+                                <button class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-xl font-semibold transition-colors">
+                                    Start Project
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Personal Finance Tracker</h3>
+                                    <p class="text-sm text-green-600 font-medium bg-green-100 px-2 py-1 rounded">Beginner</p>
+                                </div>
+                                <div class="bg-blue-100 p-3 rounded-xl">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <p class="text-slate-600 mb-4">
+                                Build a comprehensive personal finance management app with expense tracking, 
+                                budget planning, and financial goal setting using React and local storage.
+                            </p>
+
+                            <div class="mb-4">
+                                <h4 class="font-medium text-slate-900 mb-2">Technologies You'll Learn:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">React</span>
+                                    <span class="bg-teal-100 text-teal-700 px-2 py-1 rounded text-xs">JavaScript</span>
+                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">LocalStorage</span>
+                                    <span class="bg-cyan-100 text-cyan-700 px-2 py-1 rounded text-xs">CSS3</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-medium text-slate-900 mb-2">Project Features:</h4>
+                                <ul class="space-y-1">
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Expense categorization
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Budget planning tools
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Visual spending reports
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-600">
+                                    <span>⏱️ 1-2 weeks</span>
+                                </div>
+                                <button class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-xl font-semibold transition-colors">
+                                    Start Project
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Social Media Analytics</h3>
+                                    <p class="text-sm text-amber-600 font-medium bg-amber-100 px-2 py-1 rounded">Intermediate</p>
+                                </div>
+                                <div class="bg-purple-100 p-3 rounded-xl">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <p class="text-slate-600 mb-4">
+                                Create a powerful social media analytics tool that tracks engagement metrics, 
+                                analyzes trends, and provides insights using APIs and data visualization libraries.
+                            </p>
+
+                            <div class="mb-4">
+                                <h4 class="font-medium text-slate-900 mb-2">Technologies You'll Learn:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">Python</span>
+                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Pandas</span>
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">APIs</span>
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">D3.js</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-medium text-slate-900 mb-2">Project Features:</h4>
+                                <ul class="space-y-1">
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Multi-platform data collection
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Interactive dashboards
+                                    </li>
+                                    <li class="text-sm text-slate-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Trend analysis reports
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-600">
+                                    <span>⏱️ 3-4 weeks</span>
+                                </div>
+                                <button class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-xl font-semibold transition-colors">
+                                    Start Project
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+
+                    <!-- Get More Recommendations -->
+                    <div class="text-center mt-12">
+                        <button class="bg-white hover:bg-slate-50 text-slate-600 px-8 py-3 rounded-xl font-semibold border border-slate-300 transition-colors mr-4">
+                            Get More Ideas
+                        </button>
+                        <button class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors">
+                            Create Custom Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: ProjectRecommender -->
+    </main>
+
+    <!-- JavaScript for Navigation and Interactions -->
+    <script>
+        (function() {
+            // TODO: Implement React Router for navigation
+            // TODO: Add state management for form data and API responses
+            // TODO: Connect to backend API endpoints for real data
+
+            // Simple page navigation simulation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('text-primary-600', 'font-medium'));
+                    navLinks.forEach(l => l.classList.add('text-slate-600'));
+                    link.classList.remove('text-slate-600');
+                    link.classList.add('text-primary-600', 'font-medium');
+                    
+                    // Show target section, hide others
+                    sections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.remove('hidden');
+                            section.classList.add('active');
+                        } else {
+                            section.classList.add('hidden');
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Get Started button navigation
+            const getStartedBtn = document.querySelector('[data-event="click:navigateToOnboarding"]');
+            if (getStartedBtn) {
+                getStartedBtn.addEventListener('click', () => {
+                    // Trigger onboarding navigation
+                    const onboardingLink = document.querySelector('[href="#onboarding"]');
+                    if (onboardingLink) {
+                        onboardingLink.click();
+                    }
+                });
+            }
+
+            // Multi-step form simulation
+            const nextStepBtn = document.querySelector('[data-event="click:nextStep"]');
+            if (nextStepBtn) {
+                nextStepBtn.addEventListener('click', () => {
+                    // TODO: Validate current step
+                    // TODO: Move to next step in multi-step form
+                    // TODO: Update progress indicator
+                    console.log('Moving to next step of onboarding form');
+                });
+            }
+
+            // Target role selection
+            const roleButtons = document.querySelectorAll('[data-event="click:selectTargetRole"]');
+            roleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active state from all buttons
+                    roleButtons.forEach(btn => {
+                        btn.classList.remove('border-primary-600');
+                        btn.classList.add('border-slate-300');
+                    });
+                    
+                    // Add active state to clicked button
+                    button.classList.remove('border-slate-300');
+                    button.classList.add('border-primary-600');
+                    
+                    // TODO: Trigger API call to analyze skill gap for selected role
+                    console.log('Selected target role, analyzing skill gap...');
+                });
+            });
+
+            // Apply to internship buttons
+            const applyButtons = document.querySelectorAll('[data-event="click:applyToInternship"]');
+            applyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // TODO: Handle internship application process
+                    alert('Application submitted! You will be redirected to the company\'s application portal.');
+                });
+            });
+
+            // Start project buttons
+            const startProjectButtons = document.querySelectorAll('[data-event="click:startProject"]');
+            startProjectButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // TODO: Initialize project setup and resources
+                    alert('Project resources and starter code will be provided. Check your email for details!');
+                });
+            });
+
+            // Start learning plan button
+            const startLearningBtn = document.querySelector('[data-event="click:startLearningPlan"]');
+            if (startLearningBtn) {
+                startLearningBtn.addEventListener('click', () => {
+                    // TODO: Initialize personalized learning plan
+                    alert('Your personalized learning plan has been created! Resources will be sent to your email.');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

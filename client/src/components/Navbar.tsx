@@ -20,7 +20,7 @@ export default function Navbar() {
             <div className="flex-shrink-0">
               <Link href="/">
                 <h1 className="text-xl font-bold text-primary-600 cursor-pointer" data-testid="logo">
-                  🎓 Co-Pilot AI
+                  🎓 WMS.ai
                 </h1>
               </Link>
             </div>

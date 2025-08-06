@@ -7,9 +7,9 @@ export default function Landing() {
       <div className="gradient-primary py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6" data-testid="hero-title">
-              Your AI Career Co-Pilot<br />
-              <span className="text-primary-600">for B.Tech Students</span>
+            <h1 className="text-7xl md:text-5xl font-bold text-slate-900 mb-6" data-testid="hero-title">
+              Where's My Stipend? <br />
+              <span className="text-primary-600">Your AI Career Co-Pilot for B.Tech Students</span>
             </h1>
             <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto" data-testid="hero-description">
               Navigate your tech career with AI-powered guidance. Find perfect internships,
