@@ -1,21 +1,72 @@
-import axios from 'axios';
+// client/src/lib/api.ts
+import axios, { AxiosError } from "axios";
 
-export const api = axios.create({
-  baseURL: '/api',
-  headers: { 'Content-Type': 'application/json' }
+const api = axios.create({
+  baseURL: "/api",
+  timeout: 15000,
+  headers: { "Content-Type": "application/json" },
 });
 
-export async function findInternships(profile: any) {
-  const res = await api.post('/find-internships', profile);
-  return res.data;
+// Generic helper to unwrap response and throw consistent errors
+async function handleRequest<T>(promise: Promise<any>): Promise<T> {
+  try {
+    const res = await promise;
+    // If backend responds with { success: true, ... } prefer that
+    if (res?.data && (res.data.success !== undefined)) {
+      if (res.data.success) return res.data as T;
+      throw new Error(res.data.error || "API returned success: false");
+    }
+    // Otherwise return the data property directly
+    return res?.data as T;
+  } catch (err) {
+    if ((err as AxiosError).isAxiosError) {
+      const axiosErr = err as AxiosError;
+      const msg =
+        axiosErr.response?.data?.error ||
+        axiosErr.response?.data ||
+        axiosErr.message ||
+        "Network error";
+      throw new Error(String(msg));
+    }
+    throw err;
+  }
 }
 
-export async function skillGap(payload: any) {
-  const res = await api.post('/skill-gap', payload);
-  return res.data;
+/**
+ * Find internships by posting a profile or filters.
+ * Accepts { studentId } OR { profile: {...}, filters: {...} }
+ */
+export async function findInternships(payload: any) {
+  return handleRequest<any>(api.post("/find-internships", payload));
 }
 
-export async function getProjects(profile: any) {
-  const res = await api.post('/projects', profile);
-  return res.data;
+/**
+ * Skill gap analysis
+ * Server expects: { studentId, targetRole }
+ */
+export async function skillGap(payload: { studentId?: string; targetRole: string; profile?: any }) {
+  return handleRequest<any>(api.post("/skill-gap", payload));
 }
+
+/**
+ * Get recommended projects for a student.
+ * Server currently supports GET /api/projects/:studentId and GET /api/projects
+ * We'll implement both helpers:
+ */
+export async function getProjectsForStudent(studentId: string) {
+  return handleRequest<any>(api.get(`/projects/${encodeURIComponent(studentId)}`));
+}
+
+export async function getAllProjects() {
+  return handleRequest<any>(api.get("/projects"));
+}
+
+/**
+ * If you prefer POST-style project generation (profile -> LLM generate),
+ * keep a helper that posts to /projects (if you later create it).
+ */
+export async function postGenerateProjects(payload: any) {
+  return handleRequest<any>(api.post("/projects", payload));
+}
+
+export default api;
