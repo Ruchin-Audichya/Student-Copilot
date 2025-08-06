@@ -1,0 +1,54 @@
+Build a full-stack "Student Co-Pilot AI Dashboard" app.
+
+Tech Stack:
+- Backend: Python (Flask)
+- Frontend: React (with Vite)
+- Database: In-memory Python dict for now, later replace with SQLite.
+- Scraping: BeautifulSoup for HTML parsing.
+- AI: Function in backend that calls OpenRouter API (placeholder key).
+
+Features / Pages:
+1. Landing Page
+   - Hero section with heading: "Your AI Career Co-Pilot for B.Tech Students"
+   - Steps: Onboard → Find Internships → Improve Skills
+   - "Get Started" button routes to Onboarding page.
+
+2. Onboarding Page
+   - Multi-step form:
+       Step 1: Name, Email, Year in College
+       Step 2: Multi-select skills (Python, C++, SQL, etc.)
+       Step 3: Interests (AI, Web Dev, IoT, etc.)
+   - Submit sends POST request to Flask endpoint `/api/onboard` and stores in memory.
+
+3. Internship Finder Page
+   - Fetches data from `/api/find-internships` (Flask endpoint returns placeholder JSON list of internships with match scores).
+   - Display as cards with title, company, location, match score, and "Apply Now".
+
+4. Skill-Gap Analyzer Page
+   - Dropdown to select target role.
+   - Calls `/api/skill-gap` to get:
+       - List of missing skills
+       - AI-generated 30-day learning plan
+   - Display with progress bars.
+
+5. Project Recommender Page
+   - Calls `/api/projects` to get 3–5 AI-suggested project ideas.
+   - Display in card format.
+
+Backend Requirements:
+- Flask server running on port 5000.
+- CORS enabled for React frontend.
+- `/api/onboard` → stores student profile in memory.
+- `/api/find-internships` → returns placeholder JSON (later replace with scraping + AI ranking).
+- `/api/skill-gap` → returns placeholder gap analysis.
+- `/api/projects` → returns placeholder project ideas.
+
+Frontend Requirements:
+- React Router for navigation between pages.
+- Shared Navbar with links to all pages.
+- Mobile-friendly layout with TailwindCSS.
+- Use placeholder data until backend is connected.
+
+General:
+- Set up scripts so that backend and frontend can run concurrently in Replit.
+- Provide clear comments in code for where to replace placeholder logic with AI API calls or scrapers.
