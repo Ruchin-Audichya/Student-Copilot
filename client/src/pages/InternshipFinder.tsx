@@ -1,18 +1,18 @@
+// client/src/pages/InternshipFinder.tsx
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { apiRequest } from "@/lib/queryClient";
+import { findInternships } from "@/lib/api"; // <-- use new helper
 import type { InternshipWithMatch } from "@shared/schema";
 
-/**
- * InternshipFinder page now calls POST /api/find-internships
- * Sends a profile payload (mock or from actual onboarding)
- */
 export default function InternshipFinder() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [internships, setInternships] = useState<InternshipWithMatch[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Replace with actual onboarding/profile later (or studentId)
   const [profile, setProfile] = useState({
     year: 2,
     skills: ["python", "sql"],
@@ -21,37 +21,47 @@ export default function InternshipFinder() {
   });
   const [filters, setFilters] = useState({ location: "", remote: false });
 
-  useEffect(() => {
-    async function fetchJobs() {
-      setLoading(true);
-      try {
-        // Use apiRequest helper to POST profile and filters
-        const res = await apiRequest("POST", "/api/find-internships", { profile, filters });
-        const json = await res.json();
-        if (json && json.success) {
-          setInternships(json.internships || []);
-        } else if (json && json.internships) {
-          setInternships(json.internships);
-        } else {
-          setInternships([]);
-        }
-      } catch (err) {
-        console.error("Error fetching internships:", err);
-        setInternships([]);
-      } finally {
-        setLoading(false);
-      }
+  async function loadJobs(payload?: any) {
+    setLoading(true);
+    setError(null);
+    try {
+      // We call findInternships(payload) which posts to /api/find-internships
+      const body = payload ?? { profile, filters };
+      const res = await findInternships(body);
+      // our api wrapper returns the parsed body (handleRequest)
+      // it will return either { success: true, internships } or direct { internships } depending on server
+      const results = res.internships ?? res.internships ?? res.internships;
+      // Defensive: if server returned success wrapper
+      const internshipsList = res?.internships ?? (res?.internships === undefined && res?.results ? res.results : res);
+      // Normalize
+      const finalList = internshipsList || [];
+      setInternships(finalList);
+    } catch (err: any) {
+      console.error("fetch internships error", err);
+      setError(err?.message || "Failed to fetch internships");
+      setInternships([]);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchJobs();
-  }, [profile, filters]);
+  // initial load
+  useEffect(() => {
+    loadJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Internship Finder</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-semibold">Internship Finder</h1>
+        <div className="flex gap-2">
+          <Button onClick={() => loadJobs()}>Refresh</Button>
+        </div>
+      </div>
 
-      {/* Quick filter UI (simple) */}
-      <div className="mb-4 flex gap-2">
+      {/* Quick filter UI */}
+      <div className="mb-4 flex gap-2 items-center">
         <input
           placeholder="Location (e.g., Remote or Jaipur)"
           value={filters.location}
@@ -66,10 +76,7 @@ export default function InternshipFinder() {
           />
           <span>Remote only</span>
         </label>
-        <Button onClick={() => {
-          // manually trigger by toggling filters state to cause effect re-run
-          setFilters({ ...filters });
-        }}>Apply</Button>
+        <Button onClick={() => loadJobs({ profile, filters })}>Apply</Button>
       </div>
 
       {loading && (
@@ -80,7 +87,13 @@ export default function InternshipFinder() {
         </div>
       )}
 
-      {!loading && internships.length === 0 && (
+      {!loading && error && (
+        <div className="text-red-600 mb-4">
+          <strong>Error:</strong> {error}
+        </div>
+      )}
+
+      {!loading && internships.length === 0 && !error && (
         <div className="text-center py-12">
           <p className="text-lg text-slate-600">No internships found. Please complete your profile to get better matches.</p>
         </div>
