@@ -130,7 +130,12 @@ export class MemStorage implements IStorage {
 
   async createStudent(insertStudent: InsertStudent): Promise<Student> {
     const id = randomUUID();
-    const student: Student = { ...insertStudent, id };
+    const student: Student = { 
+      ...insertStudent, 
+      id,
+      skills: Array.isArray(insertStudent.skills) ? insertStudent.skills as string[] : [],
+      interests: Array.isArray(insertStudent.interests) ? insertStudent.interests as string[] : []
+    };
     this.students.set(id, student);
     return student;
   }
@@ -139,7 +144,12 @@ export class MemStorage implements IStorage {
     const existing = this.students.get(id);
     if (!existing) return undefined;
     
-    const updated = { ...existing, ...updates };
+    const updated = { 
+      ...existing, 
+      ...updates,
+      skills: Array.isArray(updates.skills) ? updates.skills as string[] : existing.skills,
+      interests: Array.isArray(updates.interests) ? updates.interests as string[] : existing.interests
+    };
     this.students.set(id, updated);
     return updated;
   }

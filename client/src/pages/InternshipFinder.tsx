@@ -24,7 +24,7 @@ export default function InternshipFinder() {
     enabled: !!studentId,
   });
 
-  const internships: InternshipWithMatch[] = internshipsData?.internships || [];
+  const internships: InternshipWithMatch[] = (internshipsData as { internships?: InternshipWithMatch[] })?.internships || [];
 
   const getMatchBadgeColor = (score: number) => {
     if (score >= 90) return "bg-emerald-100 text-emerald-700";
@@ -71,7 +71,7 @@ export default function InternshipFinder() {
                   <SelectValue placeholder="All Locations" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Locations</SelectItem>
+                  <SelectItem value="all">All Locations</SelectItem>
                   <SelectItem value="remote">Remote</SelectItem>
                   <SelectItem value="bangalore">Bangalore</SelectItem>
                   <SelectItem value="mumbai">Mumbai</SelectItem>
@@ -84,7 +84,7 @@ export default function InternshipFinder() {
                   <SelectValue placeholder="All Roles" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Roles</SelectItem>
+                  <SelectItem value="all">All Roles</SelectItem>
                   <SelectItem value="software">Software Development</SelectItem>
                   <SelectItem value="data">Data Science</SelectItem>
                   <SelectItem value="product">Product Management</SelectItem>
@@ -148,7 +148,7 @@ export default function InternshipFinder() {
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {internship.requiredSkills.map((skill, index) => (
+                    {(internship.requiredSkills || []).map((skill, index) => (
                       <Badge 
                         key={index} 
                         variant="secondary" 

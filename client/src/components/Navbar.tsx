@@ -29,7 +29,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a
+                <span
                   className={cn(
                     "nav-link transition-colors cursor-pointer",
                     location === item.href
@@ -39,7 +39,7 @@ export default function Navbar() {
                   data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
                 >
                   {item.label}
-                </a>
+                </span>
               </Link>
             ))}
           </div>

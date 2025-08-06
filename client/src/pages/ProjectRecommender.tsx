@@ -33,7 +33,7 @@ export default function ProjectRecommender() {
     enabled: !!studentId,
   });
 
-  const projects: Project[] = projectsData?.projects || [];
+  const projects: Project[] = (projectsData as { projects?: Project[] })?.projects || [];
 
   const handleStartProject = (projectTitle: string) => {
     alert(`Project resources and starter code for "${projectTitle}" will be provided. Check your email for details!`);
@@ -122,7 +122,7 @@ export default function ProjectRecommender() {
                     <div className="mb-4">
                       <h4 className="font-medium text-slate-900 mb-2">Technologies You'll Learn:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, index) => (
+                        {(project.technologies || []).map((tech, index) => (
                           <Badge 
                             key={index}
                             variant="secondary"
@@ -138,7 +138,7 @@ export default function ProjectRecommender() {
                     <div className="mb-6">
                       <h4 className="font-medium text-slate-900 mb-2">Project Features:</h4>
                       <ul className="space-y-1">
-                        {project.features.map((feature, index) => (
+                        {(project.features || []).map((feature, index) => (
                           <li 
                             key={index} 
                             className="text-sm text-slate-600 flex items-center"
