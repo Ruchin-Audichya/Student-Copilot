@@ -68,7 +68,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Find internships for a student
+  // Find internships for a student (GET by studentId) - existing route
   app.get("/api/find-internships/:studentId", async (req, res) => {
     try {
       const { studentId } = req.params;
@@ -76,6 +76,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, internships });
     } catch (error) {
       console.error("Find internships error:", error);
+      res.status(500).json({ success: false, error: "Failed to find internships" });
+    }
+  });
+
+  // **NEW**: Find internships by profile or filters (POST)
+  // Accepts:
+  //  - { studentId }  -> returns stored matches using storage.findInternships(studentId)
+  //  - { profile, filters } -> on-the-fly matching against storage.getInternships()
+  //  - no body -> returns all internships
+  app.post("/api/find-internships", async (req, res) => {
+    try {
+      const body = req.body || {};
+      const { studentId, profile, filters } = body;
+
+      // 1) If studentId provided, reuse existing matching logic
+      if (studentId) {
+        const internships = await storage.findInternships(studentId);
+        return res.json({ success: true, internships });
+      }
+
+      // 2) If profile provided, perform simple on-the-fly matching against stored internships
+      if (profile) {
+        const all = await storage.getInternships();
+        const profileSkills: string[] = (profile.skills || []).map((s: string) => s.toLowerCase());
+
+        const mapped = (all || []).map((intern: any) => {
+          const required = (intern.requiredSkills || []).map((s: string) => s.toLowerCase());
+          // Count matching skills (simple contains match)
+          const matchingSkills = profileSkills.filter((ps) =>
+            required.some((r: string) => r.includes(ps) || ps.includes(r))
+          );
+          const score = required.length > 0 ? Math.round((matchingSkills.length / required.length) * 100) / 100 : 0;
+          return { ...intern, score };
+        });
+
+        // Optional filters: location and remote
+        let filtered = mapped;
+        if (filters) {
+          if (filters.location) {
+            filtered = filtered.filter((j: any) =>
+              (j.location || "").toLowerCase().includes(String(filters.location).toLowerCase())
+            );
+          }
+          if (filters.remote !== undefined) {
+            filtered = filtered.filter((j: any) =>
+              filters.remote ? (String(j.location || "").toLowerCase().includes("remote")) : true
+            );
+          }
+        }
+
+        filtered.sort((a: any, b: any) => (b.score || 0) - (a.score || 0));
+        return res.json({ success: true, internships: filtered });
+      }
+
+      // 3) No body — return all internships
+      const internships = await storage.getInternships();
+      res.json({ success: true, internships });
+    } catch (error) {
+      console.error("Find internships (POST) error:", error);
       res.status(500).json({ success: false, error: "Failed to find internships" });
     }
   });
@@ -111,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get project recommendations
+  // Get project recommendations (by student)
   app.get("/api/projects/:studentId", async (req, res) => {
     try {
       const { studentId } = req.params;
