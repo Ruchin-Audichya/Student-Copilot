@@ -330,13 +330,15 @@ export default function Onboarding() {
                     >
                       Back
                     </Button>
-                    <Button 
-                      type="submit" 
-                      className="bg-primary-600 hover:bg-primary-700"
-                      disabled={createStudentMutation.isPending}
-                      data-testid="button-complete"
-                    >
-                      {createStudentMutation.isPending ? "Creating Profile..." : "Complete Profile"}
+                    // In client/src/pages/Onboarding.tsx, inside the final form step
+
+                    <Button
+                        type="submit"
+                              className="bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400"
+                        disabled={createStudentMutation.isPending} // Use the correct mutation name
+                        data-testid="button-submit"
+>
+                       {createStudentMutation.isPending ? "Creating Profile..." : "Finish Onboarding"}
                     </Button>
                   </div>
                 </form>
