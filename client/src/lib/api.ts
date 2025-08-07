@@ -11,19 +11,16 @@ const api = axios.create({
 async function handleRequest<T>(promise: Promise<any>): Promise<T> {
   try {
     const res = await promise;
-    // If backend responds with { success: true, ... } prefer that
-    if (res?.data && (res.data.success !== undefined)) {
-      if (res.data.success) return res.data as T;
-      throw new Error(res.data.error || "API returned success: false");
+    if (res?.data) {
+      return res.data as T;
     }
-    // Otherwise return the data property directly
-    return res?.data as T;
+    return res as T;
   } catch (err) {
     if ((err as AxiosError).isAxiosError) {
       const axiosErr = err as AxiosError;
+      const errorResponse = axiosErr.response?.data as { error?: string };
       const msg =
-        axiosErr.response?.data?.error ||
-        axiosErr.response?.data ||
+        errorResponse?.error ||
         axiosErr.message ||
         "Network error";
       throw new Error(String(msg));
