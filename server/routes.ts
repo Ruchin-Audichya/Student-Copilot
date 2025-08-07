@@ -193,6 +193,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // **AGENTIC AI**: Trigger internship scraping
+  app.post("/api/scrape-internships", async (req, res) => {
+    try {
+      const { sources = ['linkedin', 'indeed', 'angel'], force = false } = req.body;
+      
+      // Check if we should force scrape or use cached data
+      if (!force) {
+        const recentInternships = await storage.getInternships();
+        const lastScraped = recentInternships.length > 0 ? 
+          new Date(recentInternships[0].id).getTime() : 0;
+        const hoursSinceLastScrape = (Date.now() - lastScraped) / (1000 * 60 * 60);
+        
+        // If scraped within last 6 hours, return cached data
+        if (hoursSinceLastScrape < 6) {
+          return res.json({ 
+            success: true, 
+            message: "Using cached data (last scraped within 6 hours)",
+            internships: recentInternships,
+            cached: true
+          });
+        }
+      }
+
+      // Trigger scraping
+      await storage.scrapeAndStoreInternships();
+      
+      // Get updated internships
+      const internships = await storage.getInternships();
+      
+      res.json({ 
+        success: true, 
+        message: "Successfully scraped and stored new internships",
+        internships,
+        scraped: true
+      });
+    } catch (error) {
+      console.error("Scrape internships error:", error);
+      res.status(500).json({ success: false, error: "Failed to scrape internships" });
+    }
+  });
+
+  // **AGENTIC AI**: Search internships with AI-powered filters
+  app.post("/api/search-internships", async (req, res) => {
+    try {
+      const { query, filters } = req.body;
+      
+      const internships = await storage.searchInternships(query, filters);
+      
+      res.json({ 
+        success: true, 
+        internships,
+        total: internships.length
+      });
+    } catch (error) {
+      console.error("Search internships error:", error);
+      res.status(500).json({ success: false, error: "Failed to search internships" });
+    }
+  });
+
+  // **AGENTIC AI**: Get real-time internship updates
+  app.get("/api/internships/realtime", async (req, res) => {
+    try {
+      // Set up SSE (Server-Sent Events) for real-time updates
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Access-Control-Allow-Origin': '*',
+      });
+
+      const unsubscribe = storage.getRealTimeInternships((internships) => {
+        res.write(`data: ${JSON.stringify({ internships })}\n\n`);
+      });
+
+      // Clean up on client disconnect
+      req.on('close', () => {
+        unsubscribe();
+      });
+    } catch (error) {
+      console.error("Real-time internships error:", error);
+      res.status(500).json({ success: false, error: "Failed to setup real-time updates" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
