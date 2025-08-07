@@ -42,9 +42,9 @@ export class MemStorage implements IStorage {
         title: "Frontend Developer Intern",
         company: "TechCorp Solutions",
         location: "Remote",
-        stipend: "₹15,000 - ₹25,000",
+        stipend: "15000", // Storing stipend as a number makes it easier to filter
         duration: "3-6 months",
-        requiredSkills: ["React", "JavaScript", "CSS"],
+        requiredSkills: ["React", "JavaScript", "CSS", "HTML"],
         description: "Build modern web applications using React and JavaScript"
       },
       {
@@ -52,7 +52,7 @@ export class MemStorage implements IStorage {
         title: "ML Engineer Intern",
         company: "DataTech Labs",
         location: "Bangalore",
-        stipend: "₹20,000 - ₹30,000",
+        stipend: "25000",
         duration: "6 months",
         requiredSkills: ["Python", "TensorFlow", "SQL"],
         description: "Work on machine learning projects and data analysis"
@@ -62,9 +62,9 @@ export class MemStorage implements IStorage {
         title: "Backend Developer",
         company: "StartupXYZ",
         location: "Remote",
-        stipend: "₹18,000 - ₹28,000",
+        stipend: "20000",
         duration: "4-6 months",
-        requiredSkills: ["Node.js", "MongoDB", "APIs"],
+        requiredSkills: ["Node.js", "MongoDB", "APIs", "Express"],
         description: "Develop scalable backend services and APIs"
       }
     ];
@@ -95,18 +95,9 @@ export class MemStorage implements IStorage {
         description: "Build a comprehensive personal finance management app with expense tracking, budget planning, and financial goal setting using React and local storage.",
         difficulty: "Beginner",
         duration: "1-2 weeks",
-        technologies: ["React", "JavaScript", "LocalStorage", "CSS3"],
+        technologies: ["React", "JavaScript", "LocalStorage", "CSS"],
         features: ["Expense categorization", "Budget planning tools", "Visual spending reports"]
       },
-      {
-        id: randomUUID(),
-        title: "Social Media Analytics",
-        description: "Create a powerful social media analytics tool that tracks engagement metrics, analyzes trends, and provides insights using APIs and data visualization libraries.",
-        difficulty: "Intermediate",
-        duration: "3-4 weeks",
-        technologies: ["Python", "Pandas", "APIs", "D3.js"],
-        features: ["Multi-platform data collection", "Interactive dashboards", "Trend analysis reports"]
-      }
     ];
 
     sampleInternships.forEach(internship => {
@@ -133,6 +124,7 @@ export class MemStorage implements IStorage {
     const student: Student = { 
       ...insertStudent, 
       id,
+      // Ensure skills and interests are always arrays
       skills: Array.isArray(insertStudent.skills) ? insertStudent.skills as string[] : [],
       interests: Array.isArray(insertStudent.interests) ? insertStudent.interests as string[] : []
     };
@@ -158,49 +150,65 @@ export class MemStorage implements IStorage {
     return Array.from(this.internships.values());
   }
 
+  // --- LOGIC IMPROVEMENT 1: Simplified and more accurate internship matching ---
   async findInternships(studentId: string): Promise<InternshipWithMatch[]> {
     const student = await this.getStudent(studentId);
     const internships = await this.getInternships();
     
     if (!student) return [];
 
+    // Using a Set for student skills provides faster lookups (O(1) average time complexity)
+    const studentSkills = new Set(student.skills || []);
+
     return internships.map(internship => {
-      // Calculate match score based on skills overlap
-      const studentSkills = student.skills || [];
-      const requiredSkills = internship.requiredSkills || [];
+      // Calculate a simple, direct match score.
+      // For each required skill, check if the student has it.
+      const matchingSkillCount = (internship.requiredSkills || []).filter(skill => 
+        studentSkills.has(skill)
+      ).length;
       
-      const matchingSkills = studentSkills.filter(skill => 
-        requiredSkills.some(required => 
-          required.toLowerCase().includes(skill.toLowerCase()) ||
-          skill.toLowerCase().includes(required.toLowerCase())
-        )
-      );
-      
-      const matchScore = requiredSkills.length > 0 
-        ? Math.round((matchingSkills.length / requiredSkills.length) * 100)
-        : 75;
+      // The score is the number of matching skills.
+      const matchScore = matchingSkillCount;
 
       return {
         ...internship,
-        matchScore: Math.min(matchScore + Math.floor(Math.random() * 15), 100)
+        matchScore: matchScore
       };
-    }).sort((a, b) => b.matchScore - a.matchScore);
+    })
+    // Filter out internships with no matching skills and then sort by the score.
+    .filter(internship => internship.matchScore > 0)
+    .sort((a, b) => b.matchScore - a.matchScore);
   }
 
   async getProjects(): Promise<Project[]> {
     return Array.from(this.projects.values());
   }
 
+  // --- LOGIC IMPROVEMENT 2: Smarter project recommendations ---
   async getRecommendedProjects(studentId: string): Promise<Project[]> {
     const student = await this.getStudent(studentId);
     const projects = await this.getProjects();
     
-    if (!student) return projects;
+    if (!student || !student.skills || student.skills.length === 0) {
+        // If no student or skills, return a random list
+        return projects.sort(() => Math.random() - 0.5);
+    }
 
-    // Return projects sorted by relevance to student's skills/interests
-    return projects.sort(() => Math.random() - 0.5);
+    const studentSkills = new Set(student.skills);
+
+    // Score projects based on technology overlap
+    const scoredProjects = projects.map(project => {
+        const matchingTechCount = (project.technologies || []).filter(tech => 
+            studentSkills.has(tech)
+        ).length;
+        return { ...project, score: matchingTechCount };
+    });
+
+    // Sort projects by the score, highest first
+    return scoredProjects.sort((a, b) => b.score - a.score);
   }
 
+  // --- LOGIC IMPROVEMENT 3: Dynamic skill gap analysis ---
   async analyzeSkillGap(studentId: string, targetRole: string): Promise<SkillGapAnalysis> {
     const student = await this.getStudent(studentId);
     
@@ -208,83 +216,41 @@ export class MemStorage implements IStorage {
       throw new Error("Student not found");
     }
 
-    const studentSkills = student.skills || [];
+    const studentSkills = new Set(student.skills || []);
     
-    // Mock skill gap analysis based on target role
-    const roleSkillMaps: Record<string, {
-      required: string[];
-      current: { name: string; level: string; proficiency: number }[];
-      missing: { name: string; priority: string; timeToLearn: string }[];
-    }> = {
-      "Full-Stack Developer": {
-        required: ["React", "Node.js", "MongoDB", "JavaScript", "CSS", "APIs"],
-        current: [
-          { name: "React", level: "Advanced", proficiency: 80 },
-          { name: "JavaScript", level: "Intermediate", proficiency: 60 },
-          { name: "CSS", level: "Beginner", proficiency: 40 }
-        ],
-        missing: [
-          { name: "Node.js", priority: "High Priority", timeToLearn: "2-3 weeks" },
-          { name: "MongoDB", priority: "Medium Priority", timeToLearn: "1-2 weeks" },
-          { name: "Docker", priority: "Low Priority", timeToLearn: "3-4 weeks" }
-        ]
-      },
-      "Data Scientist": {
-        required: ["Python", "Machine Learning", "Statistics", "SQL", "Pandas"],
-        current: [
-          { name: "Python", level: "Intermediate", proficiency: 65 },
-          { name: "SQL", level: "Beginner", proficiency: 35 }
-        ],
-        missing: [
-          { name: "Machine Learning", priority: "High Priority", timeToLearn: "4-6 weeks" },
-          { name: "Statistics", priority: "High Priority", timeToLearn: "3-4 weeks" },
-          { name: "Pandas", priority: "Medium Priority", timeToLearn: "1-2 weeks" }
-        ]
-      },
-      "DevOps Engineer": {
-        required: ["Docker", "Kubernetes", "AWS", "CI/CD", "Linux"],
-        current: [
-          { name: "Linux", level: "Intermediate", proficiency: 55 }
-        ],
-        missing: [
-          { name: "Docker", priority: "High Priority", timeToLearn: "2-3 weeks" },
-          { name: "AWS", priority: "High Priority", timeToLearn: "4-5 weeks" },
-          { name: "Kubernetes", priority: "Medium Priority", timeToLearn: "3-4 weeks" }
-        ]
-      }
+    // Mock skill requirements for different roles
+    const roleSkillMaps: Record<string, string[]> = {
+      "Full-Stack Developer": ["React", "Node.js", "MongoDB", "JavaScript", "CSS", "APIs", "Docker"],
+      "Data Scientist": ["Python", "Machine Learning", "Statistics", "SQL", "Pandas", "TensorFlow"],
+      "DevOps Engineer": ["Docker", "Kubernetes", "AWS", "CI/CD", "Linux"],
     };
 
-    const roleData = roleSkillMaps[targetRole] || roleSkillMaps["Full-Stack Developer"];
+    const requiredSkills = new Set(roleSkillMaps[targetRole] || roleSkillMaps["Full-Stack Developer"]);
 
+    // Dynamically determine current and missing skills based on the student's profile
+    const currentSkills = Array.from(studentSkills).filter(skill => requiredSkills.has(skill));
+    const missingSkills = Array.from(requiredSkills).filter(skill => !studentSkills.has(skill));
+
+    // Mock learning plan (can be made more dynamic later)
     const learningPlan = {
       weeks: [
         {
-          title: "Week 1",
-          focus: "Node.js Fundamentals",
-          tasks: ["Express.js basics", "REST API creation", "Build a simple server"]
+          title: "Week 1-2: Core Concepts",
+          focus: missingSkills[0] || "Key Skill 1",
+          tasks: [`Learn basics of ${missingSkills[0]}`, `Build a small project with ${missingSkills[0]}`]
         },
         {
-          title: "Week 2",
-          focus: "Database Integration",
-          tasks: ["MongoDB setup", "CRUD operations", "Data modeling"]
+          title: "Week 3-4: Advanced Topics",
+          focus: missingSkills[1] || "Key Skill 2",
+          tasks: [`Deep dive into ${missingSkills[1]}`, `Integrate ${missingSkills[1]} with other tech`]
         },
-        {
-          title: "Week 3",
-          focus: "Authentication & Security",
-          tasks: ["JWT implementation", "User management", "Security best practices"]
-        },
-        {
-          title: "Week 4",
-          focus: "Project Integration",
-          tasks: ["Deploy application", "Testing & debugging", "Portfolio project"]
-        }
       ]
     };
 
     return {
       targetRole,
-      currentSkills: roleData.current,
-      missingSkills: roleData.missing,
+      currentSkills: currentSkills.map(skill => ({ name: skill, level: "Intermediate", proficiency: 60 })),
+      missingSkills: missingSkills.map(skill => ({ name: skill, priority: "High", timeToLearn: "2-4 weeks" })),
       learningPlan
     };
   }
